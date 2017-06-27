@@ -1,4 +1,4 @@
-#!/bin/bash -xe
+#!/bin/bash
 
 echo "-------Beginning klam-ssh setup-------"
 
