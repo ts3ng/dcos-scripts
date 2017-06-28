@@ -253,40 +253,38 @@ mv -f ADOBE_PLATFORM_AWS_$(echo "${ROLE_NAME}" | awk -F "-" '{print toupper($5)}
 
 
 # Change ownership of authorizedkeys_command
-echo "Changing ownership of authorizedkeys_command to root:root"
+echo "Changing ownership of authorizedkeys_command to root:root" | systemd-cat -t klam-ssh
 chown root:0 $DIR/authorizedkeys_command.sh
 chmod +x $DIR/authorizedkeys_command.sh
 
 # Relocate authorizedkeys_command
-echo "Relocating authorizedkeys_command to /opt/klam/lib"
+echo "Relocating authorizedkeys_command to /opt/klam/lib" | systemd-cat -t klam-ssh
 mv $DIR/authorizedkeys_command.sh /opt/klam/lib
 
 # Change ownership of download_s3
-echo "Changing ownership of download_s3 to root:root"
+echo "Changing ownership of download_s3 to root:root" | systemd-cat -t klam-ssh
 chown root:0 $DIR/download_s3.sh
 chmod +x $DIR/download_s3.sh
 
 # Relocate download_s3.sh have to rename to downloadS3 as reference in python klam lib
-echo "Relocating download_s3 to /opt/klam/lib"
+echo "Relocating download_s3 to /opt/klam/lib" | systemd-cat -t klam-ssh
 mv $DIR/download_s3.sh /opt/klam/lib/downloadS3.sh
 if [ -f /opt/klam/downloadS3 ]; then
-  echo "downnloadS3 already linked"
+  echo "downnloadS3 already linked" | systemd-cat -t klam-ssh
 else
   ln -s /opt/klam/lib/downloadS3.sh /opt/klam/downloadS3
 fi
 
-echo "Updating shared library cache"
+echo "Updating shared library cache" | systemd-cat -t klam-ssh
 ldconfig
 ldconfig -p | grep klam
 
 # Restart SSHD
-echo "Restarting SSHD"
+echo "Restarting SSHD" | systemd-cat -t klam-ssh
 systemctl restart sshd.service
 echo "-------Done klam-ssh setup-------"
 
 while true; do
-  echo "systemctl check"
-  cat /etc/ssh/sshd_config 2>&1
   sleep 5
 done
 
