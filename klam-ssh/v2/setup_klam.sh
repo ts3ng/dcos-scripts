@@ -171,9 +171,6 @@ cat << EOT > /etc/ld.so.conf.d/klam.conf
 /opt/klam/lib
 /opt/klam/lib/klam_cmd/
 EOT
-echo "Updating shared library cache"
-sudo ldconfig
-sudo ldconfig -p | grep klam
 
 # Validate that the files exist in the correct folder
 echo "Validating the /opt/klam/lib/libnss_klam.so* file exists in the correct folder"
@@ -277,6 +274,10 @@ if [ -f /opt/klam/downloadS3 ]; then
 else
   ln -s /opt/klam/lib/downloadS3.sh /opt/klam/downloadS3
 fi
+
+echo "Updating shared library cache"
+sudo ldconfig
+sudo ldconfig -p | grep klam
 
 # Restart SSHD
 echo "Restarting SSHD"
