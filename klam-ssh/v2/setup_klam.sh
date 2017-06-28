@@ -178,7 +178,7 @@ ls -l /opt/klam/lib/libnss_klam.so*
 
 # Re-link nsswitch.conf
 echo "Re-linking nsswitch.conf"
-sudo mv -f /home/core/nsswitch.conf /etc/nsswitch.conf
+mv -f /home/core/nsswitch.conf /etc/nsswitch.conf
 cat /etc/nsswitch.conf
 
 # generate the ATO config
@@ -191,11 +191,11 @@ cat /etc/nsswitch.conf
 
 # Move klam-ssh.conf
 echo "Moving klam-ssh.conf"
-sudo mv -f /home/core/klam-ssh.conf /etc/klam-ssh.conf
+mv -f /home/core/klam-ssh.conf /etc/klam-ssh.conf
 
 #Move klam.sh
 echo "Moving klam.sh"
-sudo mv -f /home/core/klam.sh /etc/profile.d/klam.sh
+mv -f /home/core/klam.sh /etc/profile.d/klam.sh
 cat /etc/profile.d/klam.sh
 
 #  update /etc/ssh/sshd_config if necessary
@@ -214,7 +214,7 @@ AuthorizedKeysCommandUser root
 ClientAliveInterval 900
 ClientAliveCountMax 0
 EOT
-sudo mv -f sshd_config /etc/ssh/sshd_config
+mv -f sshd_config /etc/ssh/sshd_config
 
 cat /etc/ssh/sshd_config
 
@@ -239,22 +239,22 @@ session         include         system-auth
 session         optional        pam_motd.so motd=/etc/motd
 session         optional        pam_mail.so
 EOT
-sudo mv -f system-login /etc/pam.d/system-login
+mv -f system-login /etc/pam.d/system-login
 
 echo "Setting Up sudo access: $(echo "${ROLE_NAME}" | awk -F "-" '{print toupper($5)}')"
 cat << EOT > ADOBE_PLATFORM_$(echo "${ROLE_NAME}" | awk -F "-" '{print toupper($5)}')_ROLE_ADMIN
 %ADOBE_PLATFORM_$(echo "${ROLE_NAME}" | awk -F "-" '{print toupper($5)}')_ROLE_ADMIN ALL=(ALL) NOPASSWD: ALL
 EOT
-sudo mv -f ADOBE_PLATFORM_$(echo "${ROLE_NAME}" | awk -F "-" '{print toupper($5)}')_ROLE_ADMIN /etc/sudoers.d/
+mv -f ADOBE_PLATFORM_$(echo "${ROLE_NAME}" | awk -F "-" '{print toupper($5)}')_ROLE_ADMIN /etc/sudoers.d/
 cat << EOT > ADOBE_PLATFORM_AWS_$(echo "${ROLE_NAME}" | awk -F "-" '{print toupper($5)}')_ADMIN
 %ADOBE_PLATFORM_AWS_$(echo "${ROLE_NAME}" | awk -F "-" '{print toupper($5)}')_ADMIN ALL=(ALL) NOPASSWD: ALL
 EOT
-sudo mv -f ADOBE_PLATFORM_AWS_$(echo "${ROLE_NAME}" | awk -F "-" '{print toupper($5)}')_ADMIN /etc/sudoers.d/
+mv -f ADOBE_PLATFORM_AWS_$(echo "${ROLE_NAME}" | awk -F "-" '{print toupper($5)}')_ADMIN /etc/sudoers.d/
 
 
 # Change ownership of authorizedkeys_command
 echo "Changing ownership of authorizedkeys_command to root:root"
-sudo chown root:0 $DIR/authorizedkeys_command.sh
+chown root:0 $DIR/authorizedkeys_command.sh
 chmod +x $DIR/authorizedkeys_command.sh
 
 # Relocate authorizedkeys_command
@@ -276,12 +276,12 @@ else
 fi
 
 echo "Updating shared library cache"
-sudo ldconfig
-sudo ldconfig -p | grep klam
+ldconfig
+ldconfig -p | grep klam
 
 # Restart SSHD
 echo "Restarting SSHD"
-sudo systemctl restart sshd.service
+systemctl restart sshd.service
 echo "-------Done klam-ssh setup-------"
 
 while true; do
