@@ -218,6 +218,15 @@ AuthorizedKeysCommand /opt/klam/lib/authorizedkeys_command.sh
 AuthorizedKeysCommandUser root
 ClientAliveInterval 900
 ClientAliveCountMax 0
+IgnoreRhosts yes
+X11Forwarding no
+Protocol 2
+LoginGraceTime 60
+PermitEmptyPasswords no
+MaxAuthTries 4
+HostbasedAuthentication no
+LogLevel INFO
+PermitUserEnvironment no
 EOT
 mv -f sshd_config /etc/ssh/sshd_config
 
@@ -226,23 +235,18 @@ cat /etc/ssh/sshd_config | systemd-cat -t klam-ssh
 echo "Setting up PAM modules" | systemd-cat -t klam-ssh
 cat << EOT > system-login
 auth		required        pam_tally2.so file=/var/log/tallylog deny=6 unlock_time=900
-auth            required        pam_nologin.so
+auth        required        pam_nologin.so
 auth		include         system-auth
 
 account         required        pam_access.so
 account         required        pam_nologin.so
-account         include         system-auth
 account         required        pam_tally2.so onerr=succeed
-
-password        include         system-auth
 
 session         optional        pam_loginuid.so
 session         required        pam_env.so
-session    	required    	pam_mkhomedir.so
+session    	    required        pam_mkhomedir.so
 session         optional        pam_lastlog.so
-session         include         system-auth
 session         optional        pam_motd.so motd=/etc/motd
-session         optional        pam_mail.so
 EOT
 mv -f system-login /etc/pam.d/system-login
 
