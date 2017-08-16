@@ -261,6 +261,18 @@ cat << EOT > $(echo $IAM_GROUP_NAME |awk '{ print toupper($0) }')
 EOT
 mv -f $(echo $IAM_GROUP_NAME |awk '{ print toupper($0) }') /etc/sudoers.d/
 
+# Validate /etc/passwd to ensure all groups exist in /etc/group as well
+for i in $(cut -s -d: -f4 /etc/passwd | sort -u );do 
+  grep -q -P "^.*?:[^:]*:$i:" /etc/group 
+  if [ $? -ne 0 ]; then
+    if [[ $(getent passwd $i) != "" ]];then 
+      echo -n "$(getent passwd $i | awk -F":" '{print $1}'):x:$i:" >> /etc/group
+    else
+      echo -n "dcos_$i:x:$i:" >> /etc/group
+    fi
+  fi 
+done
+
 # Change ownership of authorizedkeys_command
 echo "Changing ownership of authorizedkeys_command to root:root" | systemd-cat -t klam-ssh
 chown root:0 $DIR/authorizedkeys_command.sh
