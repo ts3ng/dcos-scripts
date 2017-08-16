@@ -28,6 +28,7 @@ else
   echo "create userdir"
   mkdir -p /home/${USER} > /dev/null
   chown -R ${USER}. /home/${USER} > /dev/null
+  chmod 750 /home/${USER}
 fi
 
 echo "adding user to docker group"

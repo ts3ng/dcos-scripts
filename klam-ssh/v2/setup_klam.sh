@@ -244,7 +244,7 @@ account         required        pam_tally2.so onerr=succeed
 
 session         optional        pam_loginuid.so
 session         required        pam_env.so
-session    	    required        pam_mkhomedir.so
+session    	    required        pam_mkhomedir.so umask=0077
 session         optional        pam_lastlog.so
 session         optional        pam_motd.so motd=/etc/motd
 EOT
