@@ -203,14 +203,29 @@ echo "Moving klam.sh" | systemd-cat -t klam-ssh
 mv -f /home/core/klam.sh /etc/profile.d/klam.sh
 cat /etc/profile.d/klam.sh
 
+cat << EOT > /etc/issues.net
+ _____ _               _____ _____ _____ 
+|  |  | |___ _____ ___|   __|   __|  |  |
+|    -| | .'|     |___|__   |__   |     |
+|__|__|_|__,|_|_|_|   |_____|_____|__|__|
+
+https://klam-sj.corp.adobe.com
+EOT
+chmod 600 /etc/issues.net
+
 #  update /etc/ssh/sshd_config if necessary
 echo "Updating /etc/ssh/sshd_config" | systemd-cat -t klam-ssh
 cat << EOT > sshd_config
 # Use most defaults for sshd configuration.
 UsePAM yes
+Banner /etc/issue.net
 UsePrivilegeSeparation sandbox
 Subsystem sftp internal-sftp
 
+Ciphers aes256-ctr,aes192-ctr,aes128-ctr
+MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,umac-128@openssh.com,hmac-sha2-256,hmac-sha2-512
+ClientAliveInterval 300
+ClientAliveCountMax 0
 PermitRootLogin no
 PasswordAuthentication no
 ChallengeResponseAuthentication yes
@@ -227,8 +242,10 @@ MaxAuthTries 4
 HostbasedAuthentication no
 LogLevel INFO
 PermitUserEnvironment no
+DenyUsers
 EOT
 mv -f sshd_config /etc/ssh/sshd_config
+chmod 600 /etc/ssh/sshd_config
 
 cat /etc/ssh/sshd_config | systemd-cat -t klam-ssh
 
