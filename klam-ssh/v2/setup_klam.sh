@@ -210,8 +210,9 @@ cat << EOT > /etc/issues.net
 |__|__|_|__,|_|_|_|   |_____|_____|__|__|
 
 https://klam-sj.corp.adobe.com
+Authorized uses only. All activity may be monitored and reported.
 EOT
-chmod 600 /etc/issues.net
+chmod 644 /etc/issues.net
 
 #  update /etc/ssh/sshd_config if necessary
 echo "Updating /etc/ssh/sshd_config" | systemd-cat -t klam-ssh
