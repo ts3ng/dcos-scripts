@@ -232,8 +232,6 @@ PasswordAuthentication no
 ChallengeResponseAuthentication yes
 AuthorizedKeysCommand /opt/klam/lib/authorizedkeys_command.sh
 AuthorizedKeysCommandUser root
-ClientAliveInterval 900
-ClientAliveCountMax 0
 IgnoreRhosts yes
 X11Forwarding no
 Protocol 2
