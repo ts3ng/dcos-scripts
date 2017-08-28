@@ -49,3 +49,11 @@ else
   start_docker
 fi
 exit 0
+
+chmod 644 /etc/passwd
+chmod 644 /etc/group
+chmod 640 /etc/gshadow
+chmod 600 /etc/passwd-
+chmod 600 /etc/group-
+chmod 600 /etc/gshadow-
+chmod 600 /etc/shadow-
